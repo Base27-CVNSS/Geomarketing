@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {distanceKm,parseCsv,analyzeSite,point,circlePolygon,normalizeFeature,asCsv} from '../src/geo.js';
+test('distance metric is zero on same point and symmetric',()=>{assert.equal(distanceKm([106,10],[106,10]),0);assert.ok(Math.abs(distanceKm([106,10],[107,10])-distanceKm([107,10],[106,10]))<1e-8)});
+test('circle polygon ring is closed',()=>{const a=circlePolygon([106,10],2);assert.equal(a.geometry.coordinates[0].length,73);assert.deepEqual(a.geometry.coordinates[0][0],a.geometry.coordinates[0].at(-1))});
+test('CSV escaped fields and coordinate parsing',()=>{const data=parseCsv('name,longitude,latitude\n"Cơ sở, A",106.3,10.2\nNope,?,??');assert.equal(data.features[0].properties.name,'Cơ sở, A');assert.equal(data.rejected,1)});
+test('Huff probability decreases in more attractive competing markets',()=>{const p=[106.37,10.24];const zone={type:'Feature',geometry:circlePolygon(p,0.5).geometry,properties:{population:1000,income_index:1}};const initial=analyzeSite(p,[],[zone],{radiusKm:2});const later=analyzeSite(p,[point(p,{name:'competitor',attractiveness:10,category:'Bán lẻ'})],[zone],{radiusKm:2});assert.equal(initial.share,1);assert.ok(later.share<initial.share)});
+test('invalid GeoJSON points rejected',()=>{assert.equal(normalizeFeature(point([190,10],{})),null);assert.equal(normalizeFeature(point([106.3,10.2],{name:'A'})).properties.name,'A')});
+test('CSV is roundtrippable',()=>{const f=point([106.3,10.2],{id:'1',name:'A, B',kind:'business',category:'Bán lẻ'});assert.equal(parseCsv(asCsv([f])).features[0].properties.name,'A, B')});
