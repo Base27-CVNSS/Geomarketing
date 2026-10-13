@@ -59,13 +59,14 @@ Huff được chuẩn hóa qua cửa hàng ứng viên và các điểm đối t
 ```text
 index.html                  # UI/DOM
 src/styles.css              # responsive styling
-src/app.js                  # controller, MapLibre, import, export, map layers
+src/app.js                  # browser bundle được tạo tự động bởi npm run build
+src/app.modular.js          # controller MapLibre, import/export, map layers
 src/geo.js                  # pure geometry, CSV parser, Huff calculation
 src/demo.js                 # deterministic synthetic features
-src/geo.test.js             # (in tests/) unit tests
 /tests/geo.test.js
 /data/du-lieu-mau.csv       # import template
-package.json                # npm test
+scripts/build.mjs           # đóng gói ba module thành src/app.js
+package.json                # npm run build / npm test
 ```
 
 ## Phân biệt yêu cầu nguồn và phần phát triển mới
@@ -79,10 +80,15 @@ package.json                # npm test
 - Ứng dụng frontend thuần không nên nhập dữ liệu nhạy cảm/riêng tư khi dùng máy chia sẻ; hiện tại dữ liệu được xử lý cục bộ, không upload qua mã ứng dụng.
 - Môi trường thật cần xác thực nguồn, kiểm soát quyền khai thác, kiểm thử CRS và QC topo trước khi phân tích.
 
-## Kiểm thử
+## Build và kiểm thử
+
+Chỉnh các file `src/geo.js`, `src/demo.js`, `src/app.modular.js` và `src/styles.css`; sau đó chạy:
 
 ```bash
+npm run build
 npm test
 ```
+
+Trang GitHub Pages dùng `index.html` + `src/styles.css` + `src/app.js` (bundle); hãy commit file đã được build. CSS được nạp trực tiếp và không cần build.
 
 **Long Ngo · Vietflexmap · 2026 · MIT License**
