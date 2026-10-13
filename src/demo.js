@@ -11,7 +11,7 @@ export function createDemoData(){
  centers.forEach(([area,x,y],j)=>{
    for(let k=0;k<6;k++){
      const dx=(rand()-.5)*.062,dy=(rand()-.5)*.046;
-     businesses.push(point([x+dx,y+dy],{id:`DEMO-CSKD-${j*6+k+1}`,name:`Cơ sở mẫu ${String(j*6+k+1).padStart(2,'0')}`,kind:'business',category:sampleCategories[(j+k)%categories.length],address:`Vị trí giả định · ${area}`,attractiveness:+(1+rand()*3).toFixed(1),source:'demo'}));
+     businesses.push(point([x+dx,y+dy],{id:`DEMO-CSKD-${j*6+k+1}`,name:`Cơ sở mẫu ${String(j*6+k+1).padStart(2,'0')}`,kind:'business',category:sampleCategories[(j+k)%sampleCategories.length],address:`Vị trí giả định · ${area}`,attractiveness:+(1+rand()*3).toFixed(1),source:'demo'}));
    }
    for(let k=0;k<2;k++) markets.push(point([x+(rand()-.5)*.04,y+(rand()-.5)*.032],{id:`DEMO-CHO-${j*2+k+1}`,name:`Chợ mô phỏng ${j*2+k+1}`,kind:'market',category:'Chợ',address:`Vị trí giả định · ${area}`,attractiveness:3,source:'demo'}));
  });
