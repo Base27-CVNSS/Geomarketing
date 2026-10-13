@@ -1,0 +1,3 @@
+id,name,kind,category,address,longitude,latitude,attractiveness
+MAU-001,Cửa hàng thử nghiệm A,business,Bán lẻ,Bến Tre,106.3757,10.2415,2.5
+MAU-002,Chợ thử nghiệm B,market,Chợ,Bến Tre,106.394,10.252,3
