@@ -1,1 +1,13 @@
-{"name":"vietflex-geomarketing","version":"0.1.0","private":true,"type":"module","description":"Static WebGIS demonstrator for business location intelligence","scripts":{"test":"node --test tests/*.test.js","serve":"npx http-server -p 8080 -c-1 ."},"license":"MIT"}
+{
+  "name": "vietflex-geomarketing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Static WebGIS demonstrator for business location intelligence",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "serve": "npx http-server -p 8080 -c-1 .",
+    "build": "node scripts/build.mjs"
+  },
+  "license": "MIT"
+}
