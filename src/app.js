@@ -45,13 +45,13 @@ function normalizeFeature(f,index=0){
     const raw=String(val(p,['kind','loai_doi_tuong','loai','type'],'business')).toLowerCase();
     const kind=/chợ|cho|market/.test(raw)?'market':'business';
     const attr=Number(val(p,['attractiveness','suc_hut','quy_mo'],1));
-    return point([+c[0],+c[1]],{id:String(val(p,['id','ma_so','ma_doanh_nghiep'],`IMP-${index+1}`)),name:String(val(p,['name','ten','ten_co_so','ten_doanh_nghiep'],`Cơ sở ${index+1}`)),kind,category:String(val(p,['category','nganh_nghe','nhom_nganh'],'Khác')),address:String(val(p,['address','dia_chi'],'')),attractiveness:Number.isFinite(attr)&&attr>0?attr:1,source:'import'});
+    return point([+c[0],+c[1]],{...p,id:String(val(p,['id','ma_so','ma_doanh_nghiep'],`IMP-${index+1}`)),name:String(val(p,['name','ten','ten_co_so','ten_doanh_nghiep'],`Cơ sở ${index+1}`)),kind,category:String(val(p,['category','nganh_nghe','nhom_nganh'],'Khác')),address:String(val(p,['address','dia_chi'],'')),attractiveness:Number.isFinite(attr)&&attr>0?attr:1,source:'import'});
   }
   const c=centroid(f);
   if(!c||!c.every(Number.isFinite)||Math.abs(c[0])>180||Math.abs(c[1])>90) return null;
   const population=Number(val(p,['population','dan_so','danso'],0));
   const income=Number(val(p,['income_index','chi_so_suc_mua','suc_mua'],1));
-  return {type:'Feature',geometry:g,properties:{id:String(val(p,['id','ma_vung'],`ZONE-${index+1}`)),name:String(val(p,['name','ten','ten_vung'],`Vùng ${index+1}`)),kind:'zone',population:Number.isFinite(population)&&population>=0?population:0,income_index:Number.isFinite(income)&&income>0?income:1,source:'import'}};
+  return {type:'Feature',geometry:g,properties:{...p,id:String(val(p,['id','ma_vung'],`ZONE-${index+1}`)),name:String(val(p,['name','ten','ten_vung'],`Vùng ${index+1}`)),kind:'zone',population:Number.isFinite(population)&&population>=0?population:0,income_index:Number.isFinite(income)&&income>0?income:1,source:'import'}};
 }
 function parseCsv(text){
   const firstLine=text.replace(/^\uFEFF/,'').split(/\r?\n/,1)[0];
@@ -105,7 +105,7 @@ function analyzeSite(coords,stores,zones,{radiusKm=8,category='all',beta=2,attra
 }
 function asCsv(points){
   const fields=['id','name','kind','category','address','longitude','latitude','attractiveness'];
-  const quote=v=>'"'+String(v??'').replaceAll('"','""')+'"';
+  const quote=v=>{const raw=String(v??'');const protectedValue=/^[\s]*[=+@-]/.test(raw)?"'"+raw:raw;return '"'+protectedValue.replaceAll('"','""')+'"'};
   return '\uFEFF'+fields.join(',')+'\n'+points.map(f=>{
     const p=f.properties;return fields.map(k=>quote(k==='longitude'?f.geometry.coordinates[0]:k==='latitude'?f.geometry.coordinates[1]:p[k])).join(',');
   }).join('\n');
